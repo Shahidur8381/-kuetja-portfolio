@@ -84,9 +84,62 @@ p {
 
 .header_brand {
 	display: grid;
-	grid-template-columns: 70px auto 70px;
+	grid-template-columns: 70px auto 70px max-content;
 	align-items: center;
 	gap: 1rem;
+	width: 100%;
+}
+
+.header_actions {
+	display: flex;
+	align-items: center;
+	gap: 0.8rem;
+}
+
+.theme_toggle {
+	background: none;
+	border: none;
+	font-size: 1.3rem;
+	cursor: pointer;
+	padding: 0.4rem;
+	border-radius: 50%;
+	transition: background 0.3s ease;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.theme_toggle:hover {
+	background: rgba(0, 0, 0, 0.05);
+}
+
+html.dark-mode .theme_toggle:hover {
+	background: rgba(255, 255, 255, 0.1);
+}
+
+.hamburger {
+	display: none;
+	flex-direction: column;
+	gap: 5px;
+	cursor: pointer;
+	padding: 10px;
+}
+
+.hamburger span {
+	width: 25px;
+	height: 3px;
+	background-color: var(--accent);
+	transition: 0.3s ease;
+}
+
+.hamburger.active span:nth-child(1) {
+	transform: translateY(8px) rotate(45deg);
+}
+.hamburger.active span:nth-child(2) {
+	opacity: 0;
+}
+.hamburger.active span:nth-child(3) {
+	transform: translateY(-8px) rotate(-45deg);
 }
 
 .header_logo {
@@ -140,9 +193,40 @@ p {
 }
 
 .nav_links a:hover,
-.nav_links a:focus-visible {
+.nav_links a:focus-visible,
+.nav_links a.active {
 	background: #f2ebe5;
 	color: var(--accent);
+}
+
+@media (max-width: 768px) {
+	.header_brand {
+		grid-template-columns: 50px auto 40px;
+		justify-content: space-between;
+	}
+	.header_brand .header_logo:last-of-type {
+		display: none;
+	}
+	.header_logo {
+		width: 50px;
+		height: 50px;
+	}
+	.logo {
+		font-size: 1.15rem;
+	}
+	.hamburger {
+		display: flex;
+	}
+	.nav_links {
+		display: none;
+		flex-direction: column;
+		width: 100%;
+		text-align: center;
+		padding-bottom: 1rem;
+	}
+	.nav_links.active {
+		display: flex;
+	}
 }
 
 .hero_section {
@@ -225,6 +309,32 @@ p {
 	grid-template-columns: repeat(3, 1fr);
 }
 
+.filter_container {
+	display: flex;
+	gap: 0.8rem;
+	flex-wrap: wrap;
+	margin-bottom: 2rem;
+}
+
+.filter_btn {
+	background: var(--surface);
+	color: var(--muted);
+	border: 1px solid var(--border);
+	padding: 0.5rem 1rem;
+	border-radius: 999px;
+	cursor: pointer;
+	font-family: inherit;
+	font-weight: 600;
+	transition: all 0.3s ease;
+}
+
+.filter_btn:hover,
+.filter_btn.active_filter {
+	background: var(--accent);
+	color: #fff;
+	border-color: var(--accent);
+}
+
 .works_grid {
 	grid-template-columns: repeat(2, 1fr);
 }
@@ -259,7 +369,7 @@ p {
 	border-radius: var(--radius);
 	padding: 1.25rem;
 	box-shadow: var(--shadow);
-	transition: transform 0.25s ease, border-color 0.25s ease;
+	transition: transform 0.25s ease, border-color 0.25s ease, opacity 0.4s ease;
 }
 
 .card:hover {
@@ -397,6 +507,184 @@ p {
 	border-radius: var(--radius);
 	padding: 1.2rem;
 }
+
+/* Lightbox Styles */
+.lightbox {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	height: 100vh;
+	background: rgba(0, 0, 0, 0.9);
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	z-index: 1050;
+	opacity: 0;
+	pointer-events: none;
+	transition: opacity 0.3s ease;
+}
+
+.lightbox.show {
+	opacity: 1;
+	pointer-events: auto;
+}
+
+.lightbox_content {
+	max-width: 90%;
+	max-height: 90%;
+	border-radius: 8px;
+	box-shadow: 0 5px 25px rgba(0, 0, 0, 0.5);
+	transform: scale(0.9);
+	transition: transform 0.3s ease;
+}
+
+.lightbox.show .lightbox_content {
+	transform: scale(1);
+}
+
+.lightbox_close {
+	position: absolute;
+	top: 20px;
+	right: 30px;
+	font-size: 40px;
+	color: #fff;
+	cursor: pointer;
+	z-index: 1060;
+	transition: color 0.2s ease;
+}
+
+.lightbox_close:hover {
+	color: var(--accent);
+}
+
+/* Feature 5: Dark Mode */
+html.dark-mode {
+	--bg: #16181b;
+	--surface: #22252a;
+	--text: #e6e6e6;
+	--muted: #a6a6a6;
+	--border: #3b3b3b;
+	--shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+}
+
+html.dark-mode body {
+	background: var(--bg);
+}
+
+html.dark-mode .header {
+	background: rgba(34, 37, 42, 0.88);
+}
+
+html.dark-mode .hero_section h1 {
+	color: #ffffff;
+}
+
+html.dark-mode .hero_intro,
+html.dark-mode .hero_meta p {
+	color: #cccccc;
+}
+
+html.dark-mode .hero_meta {
+	background: rgba(34, 37, 42, 0.8);
+}
+
+html.dark-mode .nav_links a {
+	color: #dedede;
+}
+
+html.dark-mode .nav_links a:hover,
+html.dark-mode .nav_links a:focus-visible,
+html.dark-mode .nav_links a.active {
+	background: #363a40;
+	color: var(--accent);
+}
+
+html.dark-mode .committee_table thead th {
+	background: #2e3238;
+	color: #fff;
+}
+
+html.dark-mode .committee_table tbody tr:nth-child(even) {
+	background: #1d2024;
+}
+
+html.dark-mode .advisor_list li {
+	color: #cccccc;
+}
+
+html.dark-mode .filter_btn {
+	background: #2b2f35;
+	color: #ccc;
+}
+
+html.dark-mode .filter_btn:hover,
+html.dark-mode .filter_btn.active_filter {
+	background: var(--accent);
+	color: #fff;
+	border-color: var(--accent);
+}
+
+html.dark-mode .about {
+	background: linear-gradient(180deg, transparent 0%, rgba(34, 37, 42, 0.5) 100%);
+}
+
+html.dark-mode .contact {
+	background: linear-gradient(180deg, rgba(34, 37, 42, 0.5) 0%, rgba(22, 24, 27, 0.8) 100%);
+}
+
+html.dark-mode .gallery_card figcaption {
+	color: #eeeeee;
+}
+
+/* Feature 6: Back to Top Button */
+.back_to_top {
+	position: fixed;
+	bottom: 30px;
+	right: 30px;
+	width: 46px;
+	height: 46px;
+	background: var(--accent);
+	color: white;
+	border: none;
+	border-radius: 50%;
+	font-size: 1.5rem;
+	cursor: pointer;
+	box-shadow: 0 4px 12px rgba(139, 31, 40, 0.4);
+	opacity: 0;
+	visibility: hidden;
+	transform: translateY(20px);
+	transition: all 0.3s ease;
+	z-index: 99;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.back_to_top.show {
+	opacity: 1;
+	visibility: visible;
+	transform: translateY(0);
+}
+
+.back_to_top:hover {
+	background: var(--accent-dark);
+	transform: translateY(-4px);
+}
+
+/* Feature 7: Typewriter Cursor */
+.typewriter-text {
+	border-right: 3px solid var(--accent);
+	padding-right: 4px;
+	animation: blink 0.8s step-end infinite;
+	white-space: pre-wrap;
+}
+
+@keyframes blink {
+	0%, 100% { border-color: transparent }
+	50% { border-color: var(--accent) }
+}
+
 
 .contact_form label {
 	display: block;

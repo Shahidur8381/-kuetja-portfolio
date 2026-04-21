@@ -9,6 +9,7 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Noto+Serif+Bengali:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="style.css">
+	<script src="script.js" defer></script>
 </head>
 <body>
 	<header class="header" id="home">
@@ -17,6 +18,14 @@
 				<img class="header_logo" src="assets/kuet_logo.png" alt="KUET logo">
 				<div class="logo">কুয়েট সাংবাদিক সমিতি</div>
 				<img class="header_logo" src="assets/club_logo.png" alt="কুয়েট সাংবাদিক সমিতি logo">
+				<div class="header_actions">
+					<button class="theme_toggle" id="theme_toggle" aria-label="Toggle Theme" title="Toggle Dark/Light Mode">🌙</button>
+					<div class="hamburger" id="hamburger_menu">
+						<span></span>
+						<span></span>
+						<span></span>
+					</div>
+				</div>
 			</div>
 			<nav class="nav_links" aria-label="Main Navigation">
 				<a href="#home">Home</a>
@@ -33,7 +42,7 @@
 		<section class="hero_section section">
 			<div class="container hero_content">
 				<p class="tagline">Student Journalism Club | KUET | প্রতিষ্ঠিত ২০২৫</p>
-				<h1>কণ্ঠস্বর, কনটেক্সট, এবং ক্যাম্পাসের গল্প</h1>
+				<h1><span id="hero_typewriter">কণ্ঠস্বর, কনটেক্সট, এবং ক্যাম্পাসের গল্প</span></h1>
 				<p class="hero_intro">
 					কুয়েট সাংবাদিক সমিতি একটি শিক্ষার্থী-নেতৃত্বাধীন সাংবাদিকতা প্ল্যাটফর্ম।
 					আমরা ক্যাম্পাসের গুরুত্বপূর্ণ গল্প, অর্জন, উদ্যোগ ও ভাবনাকে দায়িত্বশীলভাবে তুলে ধরি।
@@ -85,6 +94,13 @@
 		<section class="featured_works section" id="featured">
 			<div class="container">
 				<h2>Featured Works / News</h2>
+				<div class="filter_container">
+					<button class="filter_btn active_filter" data-filter="All">All</button>
+					<button class="filter_btn" data-filter="Campus Report">Campus Report</button>
+					<button class="filter_btn" data-filter="News">News</button>
+					<button class="filter_btn" data-filter="Notice">Notice</button>
+					<button class="filter_btn" data-filter="Admin">Admin</button>
+				</div>
 				<div class="works_grid">
 					<article class="work_card card">
 						<img src="assets/news1/1.png" alt="Bangla Noboborsho" class="news_image">
@@ -250,5 +266,14 @@
 			</div>
 		</div>
 	</footer>
+
+	<!-- Back to Top Button -->
+	<button id="back_to_top" class="back_to_top" aria-label="Back to Top" title="Go to top">↑</button>
+
+	<!-- Lightbox element -->
+	<div class="lightbox" id="lightbox">
+		<span class="lightbox_close" id="lightbox_close">&times;</span>
+		<img class="lightbox_content" id="lightbox_img">
+	</div>
 </body>
 </html>
