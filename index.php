@@ -1,3 +1,4 @@
+<?php require_once 'db.php'; ?>
 <!DOCTYPE html>
 <html lang="bn">
 <head>
@@ -10,7 +11,6 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Noto+Serif+Bengali:wght@600;700&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
 	<link rel="stylesheet" href="style.css">
-	<script src="script.js" defer></script>
 </head>
 <body>
 	<header class="header" id="home">
@@ -85,8 +85,12 @@
 				<div class="advisor_box card">
 					<h3>উপদেষ্টা পরিষদ</h3>
 					<ul class="advisor_list">
-						<li>ড. মোঃ আসরাফুল ইসলাম, অধ্যাপক, মেকানিক্যাল ইঞ্জিনিয়ারিং বিভাগ, কুয়েট</li>
-						<li>ড. মোঃ শামীম হোসেন, সহযোগী অধ্যাপক, এনার্জি সায়েন্স এন্ড ইঞ্জিনিয়ারিং বিভাগ, কুয়েট</li>
+						<?php
+						$stmtAdv = $pdo->query("SELECT * FROM members WHERE committee_type='advisor'");
+						while ($adv = $stmtAdv->fetch()):
+						?>
+						<li><strong><?php echo htmlspecialchars($adv['name']); ?></strong> - <?php echo htmlspecialchars($adv['position']); ?>, <?php echo htmlspecialchars($adv['dept_batch']); ?></li>
+						<?php endwhile; ?>
 					</ul>
 				</div>
 			</div>
@@ -103,37 +107,21 @@
 					<button class="filter_btn" data-filter="Admin">Admin</button>
 				</div>
 				<div class="works_grid">
+					<?php
+					$stmt = $pdo->query("SELECT * FROM news ORDER BY created_at DESC LIMIT 4");
+					while ($news = $stmt->fetch()):
+						// formatting date
+						$dateObj = new DateTime($news['created_at']);
+						$formattedDate = date_format($dateObj, 'd F, Y');
+					?>
 					<article class="work_card card">
-						<img src="assets/news1/1.png" alt="Bangla Noboborsho" class="news_image">
-						<span class="label">Campus Report</span>
-						<h3>দিনব্যাপী বর্ণাঢ্য আয়োজনে কুয়েটে বাংলা নববর্ষ উদযাপন</h3>
-						<p>কুয়েট-এ নানা আয়োজনে বাংলা নববর্ষ ১৪৩৩ উদযাপন, শোভাযাত্রা ও সাংস্কৃতিক অনুষ্ঠান।</p>
-						<p class="news_date">১৪ এপ্রিল, ২০২৬</p>
+						<img src="assets/<?php echo htmlspecialchars($news['image']); ?>" alt="News Image" class="news_image">
+						<span class="label"><?php echo htmlspecialchars($news['category']); ?></span>
+						<h3><?php echo htmlspecialchars($news['title']); ?></h3>
+						<p><?php echo substr(htmlspecialchars($news['details']), 0, 100); ?>...</p>
+						<p class="news_date"><?php echo $formattedDate; ?></p>
 					</article>
-
-					<article class="work_card card">
-						<img src="assets/news2/1.png" alt="VC Meeting" class="news_image">
-						<span class="label">News</span>
-						<h3>কুয়েটে শিক্ষার্থীদের সাথে উপাচার্যের মতবিনিময় সভা</h3>
-						<p>শিক্ষা, আবাসন ও চিকিৎসা সেবা আধুনিকায়নের ঘোষণাসহ শিক্ষার্থীদের বিভিন্ন দাবি নিয়ে আলোচনা।</p>
-						<p class="news_date">৭ এপ্রিল, ২০২৬</p>
-					</article>
-
-					<article class="work_card card">
-						<img src="assets/news3/1.png" alt="University Notice" class="news_image">
-						<span class="label">Notice</span>
-						<h3>অফিস ও ক্লাসের নতুন সময়সূচী</h3>
-						<p>বিশ্ববিদ্যালয় মঞ্জুরী কমিশনের নির্দেশনা অনুযায়ী অফিস ও ক্লাসের সংশোধিত সময়সূচী।</p>
-						<p class="news_date">৭ এপ্রিল, ২০২৬</p>
-					</article>
-
-					<article class="work_card card">
-                        <img src="assets/news4/1.png" alt="New Vice-Chancellor অধ্যাপক ডঃ মুহাম্মদ মাছুদ" class="news_image">
-						<span class="label">Admin</span>
-						<h3>কুয়েটের নতুন উপাচার্য অধ্যাপক ডঃ মুহাম্মদ মাছুদ</h3>
-						<p>খুলনা প্রকৌশল ও প্রযুক্তি বিশ্ববিদ্যালয়ের নতুন উপাচার্য হিসেবে অধ্যাপক ডঃ মুহাম্মদ মাছুদ নাম চূড়ান্ত।</p>
-						<p class="news_date">১৬ মার্চ, ২০২৬</p>
-					</article>
+					<?php endwhile; ?>
 				</div>
 			</div>
 		</section>
@@ -152,54 +140,17 @@
 							</tr>
 						</thead>
 						<tbody>
+							<?php
+							$stmtExec = $pdo->query("SELECT * FROM members WHERE committee_type='executive'");
+							while ($member = $stmtExec->fetch()):
+							?>
 							<tr>
-								<td>তানভীর আহমেদ</td>
-								<td>সভাপতি</td>
-								<td>সিএসই, ২০</td>
-								<td>ক্যাম্পাস রিপোর্ট ২৪ ডট কম, সময় জার্নাল</td>
+								<td><?php echo htmlspecialchars($member['name']); ?></td>
+								<td><?php echo htmlspecialchars($member['position']); ?></td>
+								<td><?php echo htmlspecialchars($member['dept_batch']); ?></td>
+								<td><?php echo htmlspecialchars($member['media'] ?? 'N/A'); ?></td>
 							</tr>
-							<tr>
-								<td>সাকিব মাহমুদ</td>
-								<td>সাধারণ সম্পাদক</td>
-								<td>ইইই, ২১</td>
-								<td>দৈনিক কালের সমাজ</td>
-							</tr>
-							<tr>
-								<td>রুবাবা তাসনিম</td>
-								<td>যুগ্ম সাধারণ সম্পাদক</td>
-								<td>এমটিই, ২০</td>
-								<td>খুলনা প্রতিদিন</td>
-							</tr>
-							<tr>
-								<td>মোঃ নাজমুল ইসলাম</td>
-								<td>অর্থ সম্পাদক</td>
-								<td>এলই, ২২</td>
-								<td>কালবেলা, খবরের প্রতিদিন</td>
-							</tr>
-							<tr>
-								<td>শাকিলুল হাসান</td>
-								<td>দপ্তর সম্পাদক</td>
-								<td>ইউআরপি, ২২</td>
-								<td>দ্য ডেইলি ক্যাম্পাস</td>
-							</tr>
-							<tr>
-								<td>মোঃ সাদিউল ইসলাম</td>
-								<td>কার্যকরী সদস্য</td>
-								<td>এমএসই, ২২</td>
-								<td>বাংলাদেশ গার্ডিয়ান, কালের কণ্ঠস্বর, বাংলার রং</td>
-							</tr>
-							<tr>
-								<td>তাইফুর রহমান তুষ্ণা</td>
-								<td>কার্যকরী সদস্য</td>
-								<td>ইইই, ২২</td>
-								<td>ঢাকা ভয়েস ২৪ ডট কম</td>
-							</tr>
-							<tr>
-								<td>নোশিন ফারজানা রিফা</td>
-								<td>কার্যকরী সদস্য</td>
-								<td>ইইই, ২২</td>
-								<td>প্রজম নিউজ</td>
-							</tr>
+							<?php endwhile; ?>
 						</tbody>
 					</table>
 				</div>
@@ -240,7 +191,7 @@
 					<p>Address: Student Welfare Center, KUET, Khulna, Bangladesh, 9203</p>
 				</div>
 
-				<form class="contact_form" action="#" method="post">
+				<form class="contact_form" id="contact_form">
 					<label for="name">Name</label>
 					<input type="text" id="name" name="name" placeholder="Your name" required>
 
@@ -248,9 +199,10 @@
 					<input type="email" id="email" name="email" placeholder="you@example.com" required>
 
 					<label for="message">Message</label>
-					<textarea id="message" name="message" rows="5" placeholder="Write your message"></textarea>
+					<textarea id="message" name="message" rows="5" placeholder="Write your message" required></textarea>
 
-					<button type="submit" class="btn_primary">Send Message</button>
+					<button type="submit" class="btn_primary" id="submit_btn">Send Message</button>
+                    <p id="form_status" style="margin-top: 10px; display: none; font-weight: bold;"></p>
 				</form>
 			</div>
 		</section>
@@ -276,5 +228,52 @@
 		<span class="lightbox_close" id="lightbox_close">&times;</span>
 		<img class="lightbox_content" id="lightbox_img">
 	</div>
+
+	<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+	<script type="text/javascript">
+		(function() {
+			emailjs.init("pgd3C4xHQyrhTINDn");
+		})();
+        
+        document.addEventListener("DOMContentLoaded", function() {
+            var form = document.getElementById('contact_form');
+            var statusMsg = document.getElementById('form_status');
+            var btn = document.getElementById('submit_btn');
+
+            if (form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+                    
+                    btn.textContent = 'Sending...';
+                    btn.disabled = true;
+                    
+                    emailjs.sendForm('service_9889x4f', 'template_i3fj1fg', form)
+                        .then(function(response) {
+                            alert('Success! Your message has been sent.');
+                            
+                            statusMsg.style.display = 'block';
+                            statusMsg.style.color = '#28a745';
+                            statusMsg.textContent = 'Message sent successfully!';
+                            
+                            form.reset();
+                            btn.textContent = 'Send Message';
+                            btn.disabled = false;
+                            
+                            setTimeout(function() { statusMsg.style.display = 'none'; }, 5000);
+                        }, function(error) {
+                            alert('Failed to send the message. Error: ' + JSON.stringify(error));
+                            
+                            statusMsg.style.display = 'block';
+                            statusMsg.style.color = '#dc3545';
+                            statusMsg.textContent = 'Failed to send the message. Please try again.';
+                            
+                            btn.textContent = 'Send Message';
+                            btn.disabled = false;
+                        });
+                });
+            }
+        });
+	</script>
+	<script src="script.js"></script>
 </body>
 </html>
