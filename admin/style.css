@@ -65,7 +65,7 @@ body {
 
 .btn-logout {
     width: 100%;
-    padding: 0.8rem;
+    /* padding: 0.8rem; */
     background: transparent;
     color: #ff4757;
     border: 1px solid #ff4757;
